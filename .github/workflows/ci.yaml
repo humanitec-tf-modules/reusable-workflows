@@ -1,0 +1,54 @@
+name: CI
+on:
+  workflow_call:
+    inputs:
+      disable-tf-format:
+        required: false
+        default: false
+        type: boolean
+        description: "Disable terraform fmt execution"
+      disable-tf-validate:
+        required: false
+        default: false
+        type: boolean
+        description: "Disable terraform validate execution"
+      disable-tf-test:
+        required: false
+        default: false
+        type: boolean
+        description: "Disable terraform test execution"
+
+jobs:
+  terraform-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.x"
+
+      - name: Init
+        run: |
+          echo "Initializing TF..."
+          terraform init -backend=false
+
+      - name: Check format
+        if: ${{ !inputs.disable-tf-format }}
+        run: |
+          echo "Checking TF format..."
+          terraform fmt --check --recursive
+          
+      - name: Validate
+        if: ${{ !inputs.disable-tf-validate }}
+        run: |
+          echo "Validating TF ..."
+          terraform validate
+
+      - name: Test
+        if: ${{ !inputs.disable-tf-test }}
+        run: |
+          echo "Testing TF ..."
+          terraform test
