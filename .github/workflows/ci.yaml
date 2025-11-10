@@ -17,6 +17,11 @@ on:
         default: false
         type: boolean
         description: "Disable terraform test execution"
+      disable-tf-docs:
+        required: false
+        default: false
+        type: boolean
+        description: "Disable Terraform docs creattion"
 
 jobs:
   terraform-validate-test-docs:
@@ -55,6 +60,7 @@ jobs:
 
       - name: Terraform docs
         uses: terraform-docs/gh-actions@main
+        if: ${{ !inputs.disable-tf-docs }}
         with:
           working-dir: .
           output-file: README.md
