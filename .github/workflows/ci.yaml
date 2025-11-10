@@ -19,7 +19,7 @@ on:
         description: "Disable terraform test execution"
 
 jobs:
-  terraform-validate-test:
+  terraform-validate-test-docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -52,3 +52,11 @@ jobs:
         run: |
           echo "Testing TF ..."
           terraform test
+
+      - name: Terraform docs
+        uses: terraform-docs/gh-actions@main
+        with:
+          working-dir: .
+          output-file: README.md
+          output-method: inject
+          git-push: "true"
