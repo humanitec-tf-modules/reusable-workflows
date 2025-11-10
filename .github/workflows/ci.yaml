@@ -17,13 +17,22 @@ on:
         default: false
         type: boolean
         description: "Disable terraform test execution"
+      disable-tf-docs:
+        required: false
+        default: false
+        type: boolean
+        description: "Disable Terraform docs creattion"
 
 jobs:
-  terraform-validate-test:
+  terraform-validate-test-docs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -52,3 +61,12 @@ jobs:
         run: |
           echo "Testing TF ..."
           terraform test
+
+      - name: Terraform docs
+        uses: terraform-docs/gh-actions@main
+        if: ${{ !inputs.disable-tf-docs }}
+        with:
+          working-dir: .
+          output-file: README.md
+          output-method: inject
+          git-push: "true"
