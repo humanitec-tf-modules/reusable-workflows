@@ -19,7 +19,7 @@ on:
         description: "Disable terraform test execution"
 
 jobs:
-  terraform-test:
+  terraform-validate-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
