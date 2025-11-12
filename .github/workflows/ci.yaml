@@ -29,10 +29,15 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout code
+      - name: Checkout code from branch
         uses: actions/checkout@v5
+        if: github.head_ref != 'main' 
         with:
           ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Checkout code from main
+        uses: actions/checkout@v5
+        if: github.head_ref == 'main' 
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -64,7 +69,7 @@ jobs:
 
       - name: Terraform docs
         uses: terraform-docs/gh-actions@main
-        if: ${{ !inputs.disable-tf-docs }}
+        if: ${{ !inputs.disable-tf-docs }} || ${{ github.head_ref != 'main' }}
         with:
           working-dir: .
           output-file: README.md
