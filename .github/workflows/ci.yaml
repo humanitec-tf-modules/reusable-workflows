@@ -29,6 +29,7 @@ jobs:
     permissions:
       contents: write
     steps:
+        # Need to differentiate the checkout ref for Terraform docs step (tool only runs on branch)
       - name: Checkout code from branch
         uses: actions/checkout@v5
         if: github.head_ref != 'main' 
@@ -69,7 +70,7 @@ jobs:
 
       - name: Terraform docs
         uses: terraform-docs/gh-actions@main
-        if: ${{ !inputs.disable-tf-docs && github.event.pull_request.merged == false }}
+        if: ${{ !inputs.disable-tf-docs && github.event.pull_request }}
         with:
           working-dir: .
           output-file: README.md
