@@ -29,16 +29,10 @@ jobs:
     permissions:
       contents: write
     steps:
-        # Need to differentiate the checkout ref for Terraform docs step (tool only runs on branch)
-      - name: Checkout code from branch
+      - name: Checkout code
         uses: actions/checkout@v5
-        if: github.head_ref != 'main' 
         with:
           ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: Checkout code from main
-        uses: actions/checkout@v5
-        if: github.head_ref == 'main' 
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
