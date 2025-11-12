@@ -49,6 +49,12 @@ jobs:
         run: |
           echo "Checking TF format..."
           terraform fmt --check --recursive
+
+      - name: Init
+        if: ${{ !inputs.disable-tf-validate || !inputs.disable-tf-test}}
+        run: |
+          echo "Initializing providers ..."
+          terraform init -backend=false
           
       - name: Validate
         if: ${{ !inputs.disable-tf-validate }}
