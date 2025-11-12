@@ -69,7 +69,7 @@ jobs:
 
       - name: Terraform docs
         uses: terraform-docs/gh-actions@main
-        if: ${{ !inputs.disable-tf-docs }} || ${{ github.head_ref != 'main' }}
+        if: ${{ !inputs.disable-tf-docs && github.event.pull_request.merged == false }}
         with:
           working-dir: .
           output-file: README.md
