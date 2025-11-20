@@ -44,25 +44,25 @@ jobs:
 
       - name: Init
         run: |
-          echo "Initializing TF..."
+          echo "Initializing Terraform ..."
           terraform init -backend=false
 
       - name: Check format
         if: ${{ !inputs.disable-tf-format }}
         run: |
-          echo "Checking TF format..."
+          echo "Checking Terraform format ..."
           terraform fmt --check --recursive
 
       - name: Validate
         if: ${{ !inputs.disable-tf-validate }}
         run: |
-          echo "Validating TF ..."
+          echo "Validating Terraform ..."
           terraform validate
 
       - name: Test
         if: ${{ !inputs.disable-tf-test }}
         run: |
-          echo "Testing TF ..."
+          echo "Testing Terraform ..."
           terraform test
 
       - name: Terraform docs
@@ -87,11 +87,11 @@ jobs:
 
       - name: Init
         run: |
-          echo "Initializing TF..."
+          echo "Initializing OpenTofu ..."
           tofu init -backend=false
 
       - name: Validate
         if: ${{ !inputs.disable-tf-validate }}
         run: |
-          echo "Validating TF ..."
+          echo "Validating OpenTofu ..."
           tofu validate
