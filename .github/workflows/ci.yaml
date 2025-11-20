@@ -92,3 +92,9 @@ jobs:
         run: |
           echo "Validating OpenTofu ..."
           tofu validate
+          
+      - name: Test
+        if: ${{ !inputs.disable-tf-test }}
+        run: |
+          echo "Testing OpenTofu ..."
+          tofu test
