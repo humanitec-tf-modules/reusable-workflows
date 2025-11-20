@@ -1,28 +1,8 @@
 name: CI
 on:
-  workflow_dispatch:
-    inputs:
-      disable-tf-format:
-        required: false
-        default: false
-        type: boolean
-        description: "Disable terraform fmt execution"
-      disable-tf-validate:
-        required: false
-        default: false
-        type: boolean
-        description: "Disable terraform validate execution"
-      disable-tf-test:
-        required: false
-        default: false
-        type: boolean
-        description: "Disable terraform test execution"
-      disable-tf-docs:
-        required: false
-        default: false
-        type: boolean
-        description: "Disable Terraform docs creattion"
-        
+  pull_request:
+    types: [opened, reopened, synchronize]
+
   workflow_call:
     inputs:
       disable-tf-format:
