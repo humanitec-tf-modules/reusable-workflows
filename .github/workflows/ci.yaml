@@ -49,7 +49,7 @@ jobs:
         run: |
           echo "Checking TF format..."
           terraform fmt --check --recursive
-          
+
       - name: Validate
         if: ${{ !inputs.disable-tf-validate }}
         run: |
@@ -70,3 +70,25 @@ jobs:
           output-file: README.md
           output-method: inject
           git-push: "true"
+
+  opentofu-validate-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+
+      - name: Init
+        run: |
+          echo "Initializing TF..."
+          tofu init -backend=false
+
+      - name: Validate
+        if: ${{ !inputs.disable-tf-validate }}
+        run: |
+          echo "Validating TF ..."
+          tofu validate
