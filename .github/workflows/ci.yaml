@@ -1,8 +1,5 @@
 name: CI
 on:
-  pull_request:
-    types: [opened, reopened, synchronize]
-
   workflow_call:
     inputs:
       disable-tf-format:
