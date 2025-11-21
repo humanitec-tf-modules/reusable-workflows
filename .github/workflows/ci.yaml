@@ -41,25 +41,25 @@ jobs:
 
       - name: Init
         run: |
-          echo "Initializing TF..."
+          echo "Initializing Terraform ..."
           terraform init -backend=false
 
       - name: Check format
         if: ${{ !inputs.disable-tf-format }}
         run: |
-          echo "Checking TF format..."
+          echo "Checking Terraform format ..."
           terraform fmt --check --recursive
-          
+
       - name: Validate
         if: ${{ !inputs.disable-tf-validate }}
         run: |
-          echo "Validating TF ..."
+          echo "Validating Terraform ..."
           terraform validate
 
       - name: Test
         if: ${{ !inputs.disable-tf-test }}
         run: |
-          echo "Testing TF ..."
+          echo "Testing Terraform ..."
           terraform test
 
       - name: Terraform docs
@@ -70,3 +70,31 @@ jobs:
           output-file: README.md
           output-method: inject
           git-push: "true"
+
+  opentofu-validate-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+
+      - name: Init
+        run: |
+          echo "Initializing OpenTofu ..."
+          tofu init -backend=false
+
+      - name: Validate
+        if: ${{ !inputs.disable-tf-validate }}
+        run: |
+          echo "Validating OpenTofu ..."
+          tofu validate
+          
+      - name: Test
+        if: ${{ !inputs.disable-tf-test }}
+        run: |
+          echo "Testing OpenTofu ..."
+          tofu test
