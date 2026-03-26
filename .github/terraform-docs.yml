@@ -4,4 +4,4 @@
 # but are not useful information for module users.
 sections:
   hide:
-  - providers
+    - providers

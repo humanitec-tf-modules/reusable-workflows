@@ -63,7 +63,7 @@ jobs:
           terraform test
 
       - name: Terraform docs
-        uses: terraform-docs/gh-actions@main
+        uses: terraform-docs/gh-actions@v1
         if: ${{ !inputs.disable-tf-docs && github.event.pull_request }}
         with:
           working-dir: .
