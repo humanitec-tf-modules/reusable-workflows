@@ -64,7 +64,7 @@ jobs:
 
       - name: Get Terraform docs config
         run: |
-          wget https://raw.githubusercontent.com/humanitec-tf-modules/reusable-workflows/refs/heads/fix-dont-show-providers-in-tf-docs/.github/terraform-docs.yml -O ./.github/terraform-docs.yml
+          wget https://raw.githubusercontent.com/humanitec-tf-modules/reusable-workflows/refs/heads/main/.github/terraform-docs.yml -O ./.github/terraform-docs.yml
         
       - name: Terraform docs
         uses: terraform-docs/gh-actions@v1
