@@ -63,6 +63,7 @@ jobs:
           terraform test
 
       - name: Get Terraform docs config
+        if: ${{ !inputs.disable-tf-docs && github.event.pull_request }}
         run: |
           wget https://raw.githubusercontent.com/humanitec-tf-modules/reusable-workflows/refs/heads/main/.github/terraform-docs.yml -O ./.github/terraform-docs.yml
         
