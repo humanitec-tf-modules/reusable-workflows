@@ -70,6 +70,7 @@ jobs:
           output-file: README.md
           output-method: inject
           git-push: "true"
+          config-file: ".github/terraform-docs.yml"
 
   opentofu-validate-test:
     runs-on: ubuntu-latest
