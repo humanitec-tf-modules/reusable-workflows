@@ -62,6 +62,10 @@ jobs:
           echo "Testing Terraform ..."
           terraform test
 
+      - name: Get Terraform docs config
+        run: |
+          wget https://raw.githubusercontent.com/humanitec-tf-modules/reusable-workflows/refs/heads/fix-dont-show-providersin-tf-docs/.github/terraform-docs.yml -O ./.github/terraform-docs.yml
+        
       - name: Terraform docs
         uses: terraform-docs/gh-actions@v1
         if: ${{ !inputs.disable-tf-docs && github.event.pull_request }}
