@@ -62,14 +62,26 @@ jobs:
           echo "Testing Terraform ..."
           terraform test
 
+      - name: Get Terraform docs config
+        if: ${{ !inputs.disable-tf-docs && github.event.pull_request }}
+        run: |
+          wget https://raw.githubusercontent.com/humanitec-tf-modules/reusable-workflows/refs/heads/main/.github/terraform-docs.yml -O ./.github/terraform-docs.yml
+
       - name: Terraform docs
-        uses: terraform-docs/gh-actions@main
+        uses: terraform-docs/gh-actions@v1
         if: ${{ !inputs.disable-tf-docs && github.event.pull_request }}
         with:
           working-dir: .
           output-file: README.md
           output-method: inject
           git-push: "true"
+          config-file: ".github/terraform-docs.yml"
+
+      - name: Remove Terraform docs config
+        if: ${{ !inputs.disable-tf-docs && github.event.pull_request }}
+        run: |
+          echo "Removing Terraform docs config to keep individual repos lean"
+          rm ./.github/terraform-docs.yml
 
   opentofu-validate-test:
     runs-on: ubuntu-latest
@@ -92,7 +104,7 @@ jobs:
         run: |
           echo "Validating OpenTofu ..."
           tofu validate
-          
+
       - name: Test
         if: ${{ !inputs.disable-tf-test }}
         run: |
