@@ -77,12 +77,6 @@ jobs:
           git-push: "true"
           config-file: ".github/terraform-docs.yml"
 
-      - name: Remove Terraform docs config
-        if: ${{ !inputs.disable-tf-docs && github.event.pull_request }}
-        run: |
-          echo "Removing Terraform docs config to keep individual repos lean"
-          rm ./.github/terraform-docs.yml
-
   opentofu-validate-test:
     runs-on: ubuntu-latest
     steps:
