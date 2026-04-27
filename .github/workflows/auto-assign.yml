@@ -10,7 +10,7 @@ jobs:
       pull-requests: write
     steps:
     - name: 'Auto-assign'
-      uses: pozil/auto-assign-issue@v2
+      uses: pozil/auto-assign-issue@v3
       with:
         repo-token: ${{ secrets.GH_PAT_AUTO_ASSIGN }}
         teams: Engineering
