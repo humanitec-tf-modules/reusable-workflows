@@ -13,7 +13,7 @@ jobs:
       uses: pozil/auto-assign-issue@v4
       with:
         repo-token: ${{ secrets.GH_PAT_AUTO_ASSIGN }}
-        teams: Engineering
+        teams: Stellwerker
         allowNoAssignees: true
         abortIfPreviousAssignees: true
         failsIfUsersCannotBeAssigned: true
