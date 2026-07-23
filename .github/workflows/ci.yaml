@@ -35,7 +35,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.x"
 
@@ -65,7 +65,7 @@ jobs:
       - name: Get Terraform docs config
         if: ${{ !inputs.disable-tf-docs && github.event.pull_request }}
         run: |
-          wget https://raw.githubusercontent.com/humanitec-tf-modules/reusable-workflows/refs/heads/main/.github/terraform-docs.yml -O ./.github/terraform-docs.yml
+          wget https://raw.githubusercontent.com/stellwerk-tf-modules/reusable-workflows/refs/heads/main/.github/terraform-docs.yml -O ./.github/terraform-docs.yml
 
       - name: Terraform docs
         uses: terraform-docs/gh-actions@v1
@@ -86,7 +86,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Setup OpenTofu
-        uses: opentofu/setup-opentofu@v1
+        uses: opentofu/setup-opentofu@v2
 
       - name: Init
         run: |
