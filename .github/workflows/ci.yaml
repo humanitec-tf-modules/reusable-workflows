@@ -1,0 +1,106 @@
+name: CI
+on:
+  workflow_call:
+    inputs:
+      disable-tf-format:
+        required: false
+        default: false
+        type: boolean
+        description: "Disable terraform fmt execution"
+      disable-tf-validate:
+        required: false
+        default: false
+        type: boolean
+        description: "Disable terraform validate execution"
+      disable-tf-test:
+        required: false
+        default: false
+        type: boolean
+        description: "Disable terraform test execution"
+      disable-tf-docs:
+        required: false
+        default: false
+        type: boolean
+        description: "Disable Terraform docs creattion"
+
+jobs:
+  terraform-validate-test-docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.x"
+
+      - name: Init
+        run: |
+          echo "Initializing Terraform ..."
+          terraform init -backend=false
+
+      - name: Check format
+        if: ${{ !inputs.disable-tf-format }}
+        run: |
+          echo "Checking Terraform format ..."
+          terraform fmt --check --recursive
+
+      - name: Validate
+        if: ${{ !inputs.disable-tf-validate }}
+        run: |
+          echo "Validating Terraform ..."
+          terraform validate
+
+      - name: Test
+        if: ${{ !inputs.disable-tf-test }}
+        run: |
+          echo "Testing Terraform ..."
+          terraform test
+
+      - name: Get Terraform docs config
+        if: ${{ !inputs.disable-tf-docs && github.event.pull_request }}
+        run: |
+          wget https://raw.githubusercontent.com/humanitec-tf-modules/reusable-workflows/refs/heads/main/.github/terraform-docs.yml -O ./.github/terraform-docs.yml
+
+      - name: Terraform docs
+        uses: terraform-docs/gh-actions@v1
+        if: ${{ !inputs.disable-tf-docs && github.event.pull_request }}
+        with:
+          working-dir: .
+          output-file: README.md
+          output-method: inject
+          git-push: "true"
+          config-file: ".github/terraform-docs.yml"
+
+  opentofu-validate-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v2
+
+      - name: Init
+        run: |
+          echo "Initializing OpenTofu ..."
+          tofu init -backend=false
+
+      - name: Validate
+        if: ${{ !inputs.disable-tf-validate }}
+        run: |
+          echo "Validating OpenTofu ..."
+          tofu validate
+
+      - name: Test
+        if: ${{ !inputs.disable-tf-test }}
+        run: |
+          echo "Testing OpenTofu ..."
+          tofu test
